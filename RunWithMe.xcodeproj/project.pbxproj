@@ -12,6 +12,10 @@
 		3BD3ED3321C2732F0015FD47 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3BD3ED3121C2732F0015FD47 /* Main.storyboard */; };
 		3BD3ED3521C273360015FD47 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3BD3ED3421C273360015FD47 /* Assets.xcassets */; };
 		3BD3ED3821C273360015FD47 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3BD3ED3621C273360015FD47 /* LaunchScreen.storyboard */; };
+		3BD3ED4021C274450015FD47 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3BD3ED3F21C274450015FD47 /* GoogleService-Info.plist */; };
+		3BD3ED4521C29AB20015FD47 /* LocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BD3ED4421C29AB20015FD47 /* LocationViewController.swift */; };
+		3BD3ED4721C29C0A0015FD47 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3BD3ED4621C29C0A0015FD47 /* CoreLocation.framework */; };
+		5097A218FA02EF05A9A13D9B /* Pods_RunWithMe.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E97C54F021E0F52A3C9DD40 /* Pods_RunWithMe.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +26,13 @@
 		3BD3ED3421C273360015FD47 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3BD3ED3721C273360015FD47 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3BD3ED3921C273360015FD47 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3BD3ED3F21C274450015FD47 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		3BD3ED4121C290C50015FD47 /* RunWithMe.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RunWithMe.entitlements; sourceTree = "<group>"; };
+		3BD3ED4421C29AB20015FD47 /* LocationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LocationViewController.swift; path = /Users/lukaszpik/Desktop/RunWithMe/RunWithMe/LocationViewController.swift; sourceTree = "<absolute>"; };
+		3BD3ED4621C29C0A0015FD47 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		5E97C54F021E0F52A3C9DD40 /* Pods_RunWithMe.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RunWithMe.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CCF46924FCE5CF5EA4797685 /* Pods-RunWithMe.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunWithMe.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RunWithMe/Pods-RunWithMe.debug.xcconfig"; sourceTree = "<group>"; };
+		F8714FA7653B832F4D6A9928 /* Pods-RunWithMe.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunWithMe.release.xcconfig"; path = "Pods/Target Support Files/Pods-RunWithMe/Pods-RunWithMe.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -29,6 +40,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3BD3ED4721C29C0A0015FD47 /* CoreLocation.framework in Frameworks */,
+				5097A218FA02EF05A9A13D9B /* Pods_RunWithMe.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -40,6 +53,8 @@
 			children = (
 				3BD3ED2C21C2732F0015FD47 /* RunWithMe */,
 				3BD3ED2B21C2732F0015FD47 /* Products */,
+				E9F22601FF45C954BC605266 /* Pods */,
+				81EDB7E101D1045E53AFA4FC /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -54,14 +69,35 @@
 		3BD3ED2C21C2732F0015FD47 /* RunWithMe */ = {
 			isa = PBXGroup;
 			children = (
+				3BD3ED4121C290C50015FD47 /* RunWithMe.entitlements */,
 				3BD3ED2D21C2732F0015FD47 /* AppDelegate.swift */,
 				3BD3ED2F21C2732F0015FD47 /* ViewController.swift */,
+				3BD3ED4421C29AB20015FD47 /* LocationViewController.swift */,
 				3BD3ED3121C2732F0015FD47 /* Main.storyboard */,
 				3BD3ED3421C273360015FD47 /* Assets.xcassets */,
 				3BD3ED3621C273360015FD47 /* LaunchScreen.storyboard */,
+				3BD3ED3F21C274450015FD47 /* GoogleService-Info.plist */,
 				3BD3ED3921C273360015FD47 /* Info.plist */,
 			);
 			path = RunWithMe;
+			sourceTree = "<group>";
+		};
+		81EDB7E101D1045E53AFA4FC /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				3BD3ED4621C29C0A0015FD47 /* CoreLocation.framework */,
+				5E97C54F021E0F52A3C9DD40 /* Pods_RunWithMe.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		E9F22601FF45C954BC605266 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				CCF46924FCE5CF5EA4797685 /* Pods-RunWithMe.debug.xcconfig */,
+				F8714FA7653B832F4D6A9928 /* Pods-RunWithMe.release.xcconfig */,
+			);
+			name = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -71,9 +107,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 3BD3ED3C21C273360015FD47 /* Build configuration list for PBXNativeTarget "RunWithMe" */;
 			buildPhases = (
+				A135475BDC8CE446101A781D /* [CP] Check Pods Manifest.lock */,
 				3BD3ED2621C2732F0015FD47 /* Sources */,
 				3BD3ED2721C2732F0015FD47 /* Frameworks */,
 				3BD3ED2821C2732F0015FD47 /* Resources */,
+				298631546BA7EC8CBBD66BC3 /* [CP] Embed Pods Frameworks */,
+				B546B9B60FAD91EE73EDA6EB /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -96,6 +135,11 @@
 				TargetAttributes = {
 					3BD3ED2921C2732F0015FD47 = {
 						CreatedOnToolsVersion = 10.0;
+						SystemCapabilities = {
+							com.apple.Keychain = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -123,6 +167,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3BD3ED3821C273360015FD47 /* LaunchScreen.storyboard in Resources */,
+				3BD3ED4021C274450015FD47 /* GoogleService-Info.plist in Resources */,
 				3BD3ED3521C273360015FD47 /* Assets.xcassets in Resources */,
 				3BD3ED3321C2732F0015FD47 /* Main.storyboard in Resources */,
 			);
@@ -130,11 +175,85 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		298631546BA7EC8CBBD66BC3 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-RunWithMe/Pods-RunWithMe-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
+				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
+				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-RunWithMe/Pods-RunWithMe-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		A135475BDC8CE446101A781D /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-RunWithMe-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B546B9B60FAD91EE73EDA6EB /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-RunWithMe/Pods-RunWithMe-resources.sh",
+				"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseUI/FirebaseAuthUI.bundle",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FirebaseAuthUI.bundle",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-RunWithMe/Pods-RunWithMe-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		3BD3ED2621C2732F0015FD47 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3BD3ED4521C29AB20015FD47 /* LocationViewController.swift in Sources */,
 				3BD3ED3021C2732F0015FD47 /* ViewController.swift in Sources */,
 				3BD3ED2E21C2732F0015FD47 /* AppDelegate.swift in Sources */,
 			);
@@ -280,9 +399,12 @@
 		};
 		3BD3ED3D21C273360015FD47 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = CCF46924FCE5CF5EA4797685 /* Pods-RunWithMe.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = RunWithMe/RunWithMe.entitlements;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 36ZJLX4ADC;
 				INFOPLIST_FILE = RunWithMe/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -297,9 +419,12 @@
 		};
 		3BD3ED3E21C273360015FD47 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F8714FA7653B832F4D6A9928 /* Pods-RunWithMe.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = RunWithMe/RunWithMe.entitlements;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 36ZJLX4ADC;
 				INFOPLIST_FILE = RunWithMe/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
