@@ -11,6 +11,7 @@
 		3B42D7EF21CFD354008C02A3 /* MatchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B42D7EE21CFD354008C02A3 /* MatchTableViewCell.swift */; };
 		3B42D7F121CFD377008C02A3 /* JoinMatchTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B42D7F021CFD377008C02A3 /* JoinMatchTableViewController.swift */; };
 		3B42D7F621D4C935008C02A3 /* Match.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B42D7F521D4C935008C02A3 /* Match.swift */; };
+		3B42D7F821D4DB23008C02A3 /* WaitingMatchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B42D7F721D4DB23008C02A3 /* WaitingMatchViewController.swift */; };
 		3BD3ED2E21C2732F0015FD47 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BD3ED2D21C2732F0015FD47 /* AppDelegate.swift */; };
 		3BD3ED3021C2732F0015FD47 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BD3ED2F21C2732F0015FD47 /* ViewController.swift */; };
 		3BD3ED3321C2732F0015FD47 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3BD3ED3121C2732F0015FD47 /* Main.storyboard */; };
@@ -27,6 +28,7 @@
 		3B42D7EE21CFD354008C02A3 /* MatchTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchTableViewCell.swift; sourceTree = "<group>"; };
 		3B42D7F021CFD377008C02A3 /* JoinMatchTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinMatchTableViewController.swift; sourceTree = "<group>"; };
 		3B42D7F521D4C935008C02A3 /* Match.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Match.swift; sourceTree = "<group>"; };
+		3B42D7F721D4DB23008C02A3 /* WaitingMatchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaitingMatchViewController.swift; sourceTree = "<group>"; };
 		3BD3ED2A21C2732F0015FD47 /* RunWithMe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RunWithMe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3BD3ED2D21C2732F0015FD47 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3BD3ED2F21C2732F0015FD47 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -90,6 +92,7 @@
 				3B42D7EE21CFD354008C02A3 /* MatchTableViewCell.swift */,
 				3B42D7F021CFD377008C02A3 /* JoinMatchTableViewController.swift */,
 				3B42D7F521D4C935008C02A3 /* Match.swift */,
+				3B42D7F721D4DB23008C02A3 /* WaitingMatchViewController.swift */,
 			);
 			path = RunWithMe;
 			sourceTree = "<group>";
@@ -271,6 +274,7 @@
 				3B42D7F121CFD377008C02A3 /* JoinMatchTableViewController.swift in Sources */,
 				3BD3ED4521C29AB20015FD47 /* LocationViewController.swift in Sources */,
 				3BD3ED3021C2732F0015FD47 /* ViewController.swift in Sources */,
+				3B42D7F821D4DB23008C02A3 /* WaitingMatchViewController.swift in Sources */,
 				3BD3ED2E21C2732F0015FD47 /* AppDelegate.swift in Sources */,
 				3B42D7EB21CFC5D8008C02A3 /* StartMatchViewController.swift in Sources */,
 				3B42D7F621D4C935008C02A3 /* Match.swift in Sources */,

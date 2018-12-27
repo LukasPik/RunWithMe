@@ -27,4 +27,12 @@ public class Match {
         self.distance = distance
         self.opponent = opponent
     }
+    
+    func createMatch() -> String {
+        var result = "[dist:"
+        result += String(self.distance)
+        result += ", opponent:" + self.opponent
+        result += ", "
+        return result
+    }
 }

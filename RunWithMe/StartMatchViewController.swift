@@ -16,6 +16,7 @@ class StartMatchViewController: UIViewController, UIPickerViewDelegate, UIPicker
     
     var pickerData: [String] = [String]()
     var dbRef: DatabaseReference!
+    var id: String!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,11 +46,18 @@ class StartMatchViewController: UIViewController, UIPickerViewDelegate, UIPicker
         let selection = pickerData[distanceSelector.selectedRow(inComponent: 0)]
         print("Create a match for " + selection)
         
-        
-        dbRef.child("matches").child(String(Int.random(in: 0..<100))).setValue(selection)
+        id = String(Int.random(in: 0..<100))
+        dbRef.child("matches").child(id).setValue(["dist": selection, "opponent": "None", "init": 0])
         
     }
     
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let receiverVC = segue.destination as? WaitingMatchViewController {
+            receiverVC.matchRef = id
+        }
+        
+    }
     /*
     // MARK: - Navigation
 
