@@ -9,5 +9,6 @@ target 'RunWithMe' do
 
 pod 'Firebase/Core'
 pod 'FirebaseUI/Auth'
+pod 'Firebase/Database'
 
 end

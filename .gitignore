@@ -1,2 +1,4 @@
 Pods
-*.plist
+RunWithMe/*.plist
+*.class
+RunWithMe.xcodeproj/xcuserdata/*
