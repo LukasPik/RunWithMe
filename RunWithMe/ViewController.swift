@@ -14,6 +14,16 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        let authUI = FUIAuth.defaultAuthUI()
+        guard authUI != nil else {
+            //Log the error
+            return
+        }
+        
+        authUI?.delegate = self
+        let authViewController = authUI!.authViewController()
+        
+        present(authViewController, animated: true, completion: nil)
     }
 
     @IBAction func loginBtn(_ sender: UIButton) {

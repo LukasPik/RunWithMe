@@ -1,18 +1,20 @@
 //
-//  MatchTableViewCell.swift
+//  HistoryTableViewCell.swift
 //  RunWithMe
 //
-//  Created by Lukasz Pik on 23/12/2018.
-//  Copyright © 2018 Łukasz Pik. All rights reserved.
+//  Created by Lukasz Pik on 12/01/2019.
+//  Copyright © 2019 Łukasz Pik. All rights reserved.
 //
 
 import UIKit
 
-class MatchTableViewCell: UITableViewCell {
-
-    @IBOutlet weak var distanceLabel: UILabel!
+class HistoryTableViewCell: UITableViewCell {
     
+    
+    @IBOutlet weak var distanceLabel: UILabel!
+    @IBOutlet weak var timeLabel: UILabel!
     @IBOutlet weak var opponentLabel: UILabel!
+    @IBOutlet weak var dateLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()

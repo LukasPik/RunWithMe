@@ -8,6 +8,7 @@
 
 import UIKit
 import FirebaseDatabase
+import FirebaseAuth
 
 class StartMatchViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
 
@@ -17,6 +18,7 @@ class StartMatchViewController: UIViewController, UIPickerViewDelegate, UIPicker
     var pickerData: [String] = [String]()
     var dbRef: DatabaseReference!
     var id: String!
+    var distance: Int!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,9 +47,20 @@ class StartMatchViewController: UIViewController, UIPickerViewDelegate, UIPicker
     @IBAction func createMatch(_ sender: UIButton) {
         let selection = pickerData[distanceSelector.selectedRow(inComponent: 0)]
         print("Create a match for " + selection)
+        if distanceSelector.selectedRow(inComponent: 0) < 3 {
+            distance = Int(selection.dropLast())
+        } else {
+            distance = Int(selection.dropLast().dropLast()) ?? 1 * 1000
+        }
+        
+        var creator = "Test123"
+        if let user = Auth.auth().currentUser {
+            creator = user.displayName ?? "Temp"
+            
+        }
         
         id = String(Int.random(in: 0..<100))
-        dbRef.child("matches").child(id).setValue(["dist": selection, "opponent": "None", "init": 0])
+        dbRef.child("matches").child(id).setValue(["dist": selection, "opponent": "None", "init": 0, "creator": creator])
         
     }
     
@@ -55,6 +68,7 @@ class StartMatchViewController: UIViewController, UIPickerViewDelegate, UIPicker
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let receiverVC = segue.destination as? WaitingMatchViewController {
             receiverVC.matchRef = id
+            receiverVC.raceDistance = distance
         }
         
     }

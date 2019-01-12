@@ -8,12 +8,17 @@
 
 import UIKit
 import FirebaseDatabase
+import FirebaseAuth
 
 class JoinMatchTableViewController: UITableViewController {
     
     var dbRef: DatabaseReference!
     var matchesNumber: Int = 0
     var matches: [Match] = [Match]()
+    var refHandle: UInt!
+    var match_id: Int = 0
+    var distance: Int!
+    var opponent: String!
     
 
     override func viewDidLoad() {
@@ -26,7 +31,6 @@ class JoinMatchTableViewController: UITableViewController {
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
         downloadMatchData()
-        
     }
 
     // MARK: - Table view data source
@@ -38,6 +42,7 @@ class JoinMatchTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return matches.count
     }
+    
 
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -46,11 +51,65 @@ class JoinMatchTableViewController: UITableViewController {
         }
 
         let match = matches[indexPath.row]
-        cell.distanceLabel.text = String(match.distance) + " m"
-        
+        if match.distance < 100 {
+            cell.distanceLabel.text = String(match.distance) + " km"
+        } else {
+            cell.distanceLabel.text = String(match.distance) + " m"
+        }
+        cell.opponentLabel.text = match.creator
         return cell
     }
     
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print("Selected match id: " + String(matches[indexPath.row].id))
+        
+        let username = Auth.auth().currentUser?.displayName ?? "Oppo 1"
+        let match = dbRef.child("matches").child(String(matches[indexPath.row].id))
+        match.updateChildValues(["init": 1, "opponent": username])
+        
+        let ref = dbRef.child("matches").child(String(matches[indexPath.row].id))
+        refHandle = ref.observe(.value) { (snapshot) in
+            if !snapshot.exists() {
+                print("Do not exists")
+            }
+            let val = snapshot.value as? NSDictionary
+            //let text = String((val ?? 0))
+            
+            print("Value changed to: ")
+            print(val ?? NSDictionary())
+            
+            print(val ?? NSDictionary())
+            if let match = val {
+                if match["init"] as! Int == 2 {
+                    let dist_str = match["dist"] as! String
+                    if dist_str.contains("k") {
+                        self.distance = Int(dist_str.dropLast().dropLast()) ?? 1 * 1000
+                    } else {
+                        self.distance = Int(dist_str.dropLast()) ?? 0
+                    }
+                    print(self.distance)
+                    print("Before segue to match")
+                    self.match_id = Int(snapshot.key) ?? 0
+                    self.opponent = match["creator"] as? String
+                    self.performSegue(withIdentifier: "joinMatchSegue", sender: self)
+                }
+            }
+        }
+        
+        
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "joinMatchSegue" {
+            let nextScene = segue.destination as? LocationViewController
+            nextScene?.mode = 1
+            nextScene?.match_id = match_id
+            nextScene?.raceDistance = Float(distance)
+            nextScene?.opponent = opponent
+            dbRef.child("matches").child(String(match_id)).removeValue()
+            dbRef.removeObserver(withHandle: refHandle)
+        }
+    }
 
     /*
     // Override to support conditional editing of the table view.
@@ -105,8 +164,15 @@ class JoinMatchTableViewController: UITableViewController {
             if let dict = snapshot.value as? NSDictionary {
                 print(dict)
                 for match in dict {
-                    let dist = Int(String(match.value as! String).dropLast())
-                    let toAdd = Match(distance: dist ?? 0)
+                    var dist_str = String((match.value as! NSDictionary)["dist"] as! String).dropLast()
+                    if dist_str.last != "0" {
+                        dist_str = dist_str.dropLast()
+                    }
+                    let dist = Int(dist_str)
+                    print(match.key)
+                    let match_details = match.value as! NSDictionary
+                    let toAdd = Match(opponent: match_details["opponent"] as! String, distance: dist ?? 0, id: Int(match.key as! String) ?? 0,
+                                      creator: match_details["creator"] as! String)
                     self.matches.append(toAdd)
                 }
                 self.matchesNumber = self.matches.count
@@ -115,6 +181,18 @@ class JoinMatchTableViewController: UITableViewController {
                 print("nil")
             }
         }
+    }
+    
+    func createAlert(title: String, message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Yes", style: UIAlertAction.Style.default, handler: { (action) in
+            alert.dismiss(animated: true, completion: nil)
+        }))
+        
+        alert.addAction(UIAlertAction(title: "No", style: UIAlertAction.Style.default, handler: { (action) in
+            alert.dismiss(animated: true, completion: nil)
+        }))
+        self.present(alert, animated: true, completion: nil)
     }
 
 }

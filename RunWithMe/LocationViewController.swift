@@ -7,14 +7,31 @@
 
 import UIKit
 import CoreLocation
+import FirebaseDatabase
+import FirebaseAuth
 
 class LocationViewController: UIViewController, CLLocationManagerDelegate {
 
+    @IBOutlet weak var opponentLabel: UILabel!
+    @IBOutlet weak var oppDistanceLabel: UILabel!
+    @IBOutlet weak var oppSpeedLabel: UILabel!
+    
+    
+    @IBOutlet weak var oppProgressBar: UIProgressView!
+    
+    var mode: Int = 0
+    var match_id: Int = 0
+    var dbRef: DatabaseReference!
+    var refHandle: UInt!
+    var opponent: String!
+    
     @IBOutlet weak var distanceLabel: UILabel!
     @IBOutlet weak var timeLabel: UILabel!
     @IBOutlet weak var speedLabel: UILabel!
     
     @IBOutlet weak var progressBar: UIProgressView!
+    
+    
     
     /*let progressBar: UIProgressView = {
         let prgsView = UIProgressView()
@@ -32,7 +49,8 @@ class LocationViewController: UIViewController, CLLocationManagerDelegate {
     var counter: Double = 0.0
     var timer = Timer()
     var isDistanceUpdating = false
-    var raceDistance: Float = 2000.0
+    var raceDistance: Float = 100.0
+    var is_finished = false
     
     
     var locationManager: CLLocationManager!
@@ -41,11 +59,10 @@ class LocationViewController: UIViewController, CLLocationManagerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         //progressBar.trackTintColor = UIColor.blue
-        progressBar.layer.cornerRadius = 6.5
-        progressBar.clipsToBounds = true
-        progressBar.transform = CGAffineTransform(rotationAngle: .pi / -2)
-        progressBar.translatesAutoresizingMaskIntoConstraints = false
-        progressBar.progress = 0.0
+        opponentLabel.text = opponent
+        dbRef = Database.database().reference()
+        transformProgressBar(bar: progressBar)
+        transformProgressBar(bar: oppProgressBar)
 
         // Do any additional setup after loading the view.
     }
@@ -82,12 +99,14 @@ class LocationViewController: UIViewController, CLLocationManagerDelegate {
         if !isDistanceUpdating {
             return
         }
+        var distanceStr: String = "0"
         // Calculating traveled distance
         if startLocation == nil {
             startLocation = locations.first
         } else if let location = locations.last {
             traveledDistance += lastLocation.distance(from: location)
-            distanceLabel.text = String(format: "%.1f", traveledDistance) + " m"
+            distanceStr = String(format: "%.1f", traveledDistance)
+            distanceLabel.text = distanceStr + " m"
         }
         lastLocation = locations.last
         
@@ -98,15 +117,108 @@ class LocationViewController: UIViewController, CLLocationManagerDelegate {
             return
         }
         
-        speedLabel.text = String(format: "%.1f", speed!)
+        let speedStr = String(format: "%.1f", speed!)
         
+        if Double(speedStr) ?? 0.0 > 13.0 {
+            createAlert(title: "You are moving too fast!", message: "You can't run that fast", mode: 0)
+            return
+        }
+        
+        speedLabel.text = speedStr + " m/s"
+        updateTable(speed: speedStr, distance: distanceStr)
     }
     
     @objc func updateTimer() {
         counter += 0.1
         timeLabel.text = String(format:"%.1f", counter) + " s"
         let progress = Float(traveledDistance) / raceDistance
+        if progress >= 1.0 {
+            is_finished = true
+            //endOfRace(player: 1)
+        }
         progressBar.progress = progress
+    }
+    
+    func transformProgressBar(bar: UIProgressView) {
+        bar.layer.cornerRadius = 6.5
+        bar.clipsToBounds = true
+        bar.transform = CGAffineTransform(rotationAngle: .pi / -2)
+        bar.transform = bar.transform.scaledBy(x: 1.5, y: 8)
+        bar.translatesAutoresizingMaskIntoConstraints = false
+        bar.progress = 0.0
+    }
+    
+    func updateTable(speed: String, distance: String) {
+        var match: DatabaseReference = DatabaseReference()
+        
+        if mode == 2 {
+            match = dbRef.child("current_matches").child(String(match_id)).child("master")
+        }
+        else if mode == 1 {
+            match = dbRef.child("current_matches").child(String(match_id)).child("oppo")
+        }
+        if is_finished {
+            match.updateChildValues(["distance": distance, "speed": speed, "finished": 1])
+            endOfRace(player: 1)
+            return
+        }
+        match.updateChildValues(["distance": distance, "speed": speed, "finished": 0])
+    }
+    
+    func updateOpponent() {
+        var side: String  = "oppo"
+        if mode == 1 {
+            side = "master"
+        }
+        let ref = dbRef.child("current_matches").child(String(match_id)).child(side)
+        refHandle = ref.observe(.value) { (snapshot) in
+            if !snapshot.exists() {
+                print("Do not exists")
+            }
+            let val = snapshot.value as? NSDictionary
+            //let text = String((val ?? 0))
+            let dist = val?["distance"] as? String
+            if dist == nil {
+                return
+            }
+            self.oppSpeedLabel.text = (val?["speed"] as? String ?? "0") + " m/s"
+            self.oppDistanceLabel.text = (dist ?? "0") + " m"
+            let progress = Float(dist!)! / self.raceDistance
+            self.oppProgressBar.progress = progress
+            
+            if val?["finished"] as! Int == 1 {
+                self.endOfRace(player: 0)
+            }
+        }
+    }
+    
+    func endOfRace(player: Int) {
+        timer.invalidate()
+        //locationManager.stopUpdatingLocation()
+        isDistanceUpdating = false
+        traveledDistance = 0.0
+        counter = 0.0
+        startLocation = nil
+        dbRef.removeObserver(withHandle: refHandle)
+        let date = Date()
+        let dff = DateFormatter()
+        dff.dateFormat = "yyyy-MM-dd HH:mm"
+        
+     
+        let username = Auth.auth().currentUser?.displayName ?? ""
+        if player == 1 {
+            createAlert(title: "You won!", message: "Go back to menu", mode: 1)
+            //dodanie wygranej do historii meczow uzytkownika
+            dbRef.child("history").child(username).child(dff.string(from: date)).setValue(["opponent": opponent, "distance": raceDistance, "result": 1, "time": timeLabel.text ?? "0s"])
+        }
+        else if player == 0 {
+            createAlert(title: "You lost :(", message: "Go back to menu", mode: 1)
+            
+            dbRef.child("current_matches").child(String(match_id)).removeValue()
+            
+            //dodanie przegranej do historii meczow uzytkownika
+            dbRef.child("history").child(username).child(dff.string(from: date)).setValue(["opponent": opponent, "distance": raceDistance, "result": 0, "time": timeLabel.text ?? "0s"])
+        }
     }
     
 
@@ -134,5 +246,19 @@ class LocationViewController: UIViewController, CLLocationManagerDelegate {
         //locationManager.startUpdatingLocation()
         isDistanceUpdating = true
         timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(updateTimer), userInfo: nil, repeats: true)
+        updateOpponent()
+    }
+    
+    
+    
+    func createAlert(title: String, message: String, mode: Int) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: { (action) in
+            alert.dismiss(animated: true, completion: nil)
+            if mode == 1 {
+                self.performSegue(withIdentifier: "endOfMatchSegue", sender: self)
+            }
+        }))
+        self.present(alert, animated: true, completion: nil)
     }
 }
