@@ -12,10 +12,13 @@ import FirebaseAuth
 
 class LocationViewController: UIViewController, CLLocationManagerDelegate {
 
+    @IBOutlet weak var stopBtn: UIButton!
+    @IBOutlet weak var startBtn: UIButton!
     @IBOutlet weak var opponentLabel: UILabel!
     @IBOutlet weak var oppDistanceLabel: UILabel!
     @IBOutlet weak var oppSpeedLabel: UILabel!
     
+    @IBOutlet weak var startCounterLabel: UILabel!
     
     @IBOutlet weak var oppProgressBar: UIProgressView!
     
@@ -25,32 +28,24 @@ class LocationViewController: UIViewController, CLLocationManagerDelegate {
     var refHandle: UInt!
     var opponent: String!
     
+    var startLocation: CLLocation!
+    var lastLocation: CLLocation!
+    var traveledDistance: Double = 0
+    var counter: Double = 0.0
+    var startCounter = 3
+    var timer = Timer()
+    var isDistanceUpdating = false
+    var raceDistance: Float = 100.0
+    var is_finished = false
+    
+    
     @IBOutlet weak var distanceLabel: UILabel!
     @IBOutlet weak var timeLabel: UILabel!
     @IBOutlet weak var speedLabel: UILabel!
     
     @IBOutlet weak var progressBar: UIProgressView!
-    
-    
-    
-    /*let progressBar: UIProgressView = {
-        let prgsView = UIProgressView()
-        prgsView.trackTintColor = UIColor.blue
-        prgsView.layer.cornerRadius = 6.5
-        prgsView.clipsToBounds = true
-        prgsView.transform = CGAffineTransform(rotationAngle: .pi / -2)
-        prgsView.translatesAutoresizingMaskIntoConstraints = false
-        return prgsView
-    }()*/
-    
-    var startLocation: CLLocation!
-    var lastLocation: CLLocation!
-    var traveledDistance: Double = 0
-    var counter: Double = 0.0
-    var timer = Timer()
-    var isDistanceUpdating = false
-    var raceDistance: Float = 100.0
-    var is_finished = false
+
+
     
     
     var locationManager: CLLocationManager!
@@ -70,6 +65,16 @@ class LocationViewController: UIViewController, CLLocationManagerDelegate {
     override func viewDidAppear(_ animated: Bool) {
         print("DidAppear")
         super.viewDidAppear(animated)
+        
+        startCounterLabel.isHidden = false
+        startBtn.isHidden = true
+        stopBtn.isHidden = true
+        startCounterLabel.text = "3"
+        timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(startCountingTimer), userInfo: nil, repeats: true)
+        
+        if raceDistance < 10 {
+            raceDistance *= 1000
+        }
         
         locationManager = CLLocationManager()
         locationManager.delegate = self
@@ -139,6 +144,17 @@ class LocationViewController: UIViewController, CLLocationManagerDelegate {
         progressBar.progress = progress
     }
     
+    @objc func startCountingTimer() {
+        if startCounter == 0 {
+            timer.invalidate()
+            startCounterLabel.isHidden = true
+            startMatch()
+            return
+        }
+        startCounter -= 1
+        startCounterLabel.text = String(startCounter)
+    }
+    
     func transformProgressBar(bar: UIProgressView) {
         bar.layer.cornerRadius = 6.5
         bar.clipsToBounds = true
@@ -206,19 +222,27 @@ class LocationViewController: UIViewController, CLLocationManagerDelegate {
         
      
         let username = Auth.auth().currentUser?.displayName ?? ""
+        if raceDistance >= 1000 {
+            raceDistance /= 1000
+        }
         if player == 1 {
+            dbRef.child("history").child(username).child(dff.string(from: date)).setValue(["opponent": opponent, "distance": raceDistance, "result": 1, "time": timeLabel.text ?? "0s"])
             createAlert(title: "You won!", message: "Go back to menu", mode: 1)
             //dodanie wygranej do historii meczow uzytkownika
-            dbRef.child("history").child(username).child(dff.string(from: date)).setValue(["opponent": opponent, "distance": raceDistance, "result": 1, "time": timeLabel.text ?? "0s"])
+
         }
         else if player == 0 {
+            dbRef.child("history").child(username).child(dff.string(from: date)).setValue(["opponent": opponent, "distance": raceDistance, "result": 0, "time": timeLabel.text ?? "0s"])
+            dbRef.child("current_matches").child(String(match_id)).removeValue()
             createAlert(title: "You lost :(", message: "Go back to menu", mode: 1)
             
-            dbRef.child("current_matches").child(String(match_id)).removeValue()
-            
-            //dodanie przegranej do historii meczow uzytkownika
-            dbRef.child("history").child(username).child(dff.string(from: date)).setValue(["opponent": opponent, "distance": raceDistance, "result": 0, "time": timeLabel.text ?? "0s"])
         }
+    }
+    
+    func startMatch() {
+        isDistanceUpdating = true
+        timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(updateTimer), userInfo: nil, repeats: true)
+        updateOpponent()
     }
     
 
