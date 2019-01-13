@@ -11,6 +11,7 @@ import UIKit
 class HistoryTableViewCell: UITableViewCell {
     
     
+    @IBOutlet weak var resultIndicator: UIProgressView!
     @IBOutlet weak var distanceLabel: UILabel!
     @IBOutlet weak var timeLabel: UILabel!
     @IBOutlet weak var opponentLabel: UILabel!

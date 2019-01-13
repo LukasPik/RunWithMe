@@ -13,6 +13,7 @@ import FirebaseAuth
 class StartMatchViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
 
 
+    @IBOutlet weak var createBtn: UIButton!
     @IBOutlet weak var distanceSelector: UIPickerView!
     
     var pickerData: [String] = [String]()
@@ -25,6 +26,7 @@ class StartMatchViewController: UIViewController, UIPickerViewDelegate, UIPicker
         dbRef = Database.database().reference()
         self.distanceSelector.delegate = self
         self.distanceSelector.dataSource = self
+        applyShadowBtn(elem: createBtn, radius: 10)
         
         pickerData = ["100m", "200m", "500m", "1km", "2km"]
         // Do any additional setup after loading the view.
@@ -40,8 +42,13 @@ class StartMatchViewController: UIViewController, UIPickerViewDelegate, UIPicker
         return pickerData.count
     }
     
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+   /* func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         return pickerData[row]
+    }*/
+    
+    func pickerView(_ pickerView: UIPickerView, attributedTitleForRow row: Int, forComponent component: Int) -> NSAttributedString? {
+        let string = pickerData[row]
+        return NSAttributedString(string: string, attributes: [NSAttributedString.Key.foregroundColor: UIColor(named: "textClr") ?? UIColor.white])
     }
     
     @IBAction func createMatch(_ sender: UIButton) {

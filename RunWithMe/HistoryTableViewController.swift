@@ -43,7 +43,7 @@ class HistoryTableViewController: UITableViewController {
                     let dist = Int(dist_str)
                     print(match.key)
                     let match_details = match.value as! NSDictionary
-                    let toAdd = Match(opponent: match_details["opponent"] as! String, distance: dist ?? 0, id: 0, creator: match_details["time"] as! String ,date: match.key as! String)
+                    let toAdd = Match(opponent: match_details["opponent"] as! String, distance: dist ?? 0, id: match_details["result"] as! Int, creator: match_details["time"] as! String ,date: match.key as! String)
                     self.matches.append(toAdd)
                 }
                 self.tableView.reloadData()
@@ -78,8 +78,25 @@ class HistoryTableViewController: UITableViewController {
         cell.opponentLabel.text = match.opponent
         cell.dateLabel.text = match.date
         cell.timeLabel.text = match.creator
+        cell.resultIndicator.progress = 1.0
+        cell.resultIndicator = transformResultBar(bar: cell.resultIndicator,res: match.id)
+
         return cell
 
+    }
+    
+    
+    func transformResultBar(bar: UIProgressView, res: Int) -> UIProgressView {
+        bar.layer.cornerRadius = 6.5
+        bar.clipsToBounds = true
+        bar.transform = bar.transform.scaledBy(x: 1.0, y: 1.2)
+        if res == 0 {
+            bar.progressTintColor = UIColor(red: 1.0, green: 0.0, blue: 0.0, alpha: 0.6)
+        } else {
+            bar.progressTintColor = UIColor(red: 0.0, green: 1.0, blue: 0.0, alpha: 0.6)
+        }
+        
+        return bar
     }
     
 

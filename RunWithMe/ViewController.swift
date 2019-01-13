@@ -53,3 +53,21 @@ extension ViewController: FUIAuthDelegate {
     }
 }
 
+extension UIViewController {
+    
+    func applyShadowBtn(elem: UIButton, radius: CGFloat) {
+        elem.layer.cornerRadius = radius
+        elem.backgroundColor = UIColor(named: "barClr")
+        elem.layer.shadowColor = UIColor.darkGray.cgColor
+        elem.layer.shadowRadius = 5
+        elem.layer.shadowOpacity = 0.7
+        elem.layer.shadowOffset = CGSize(width: 5, height: 0)
+    }
+    
+    func applyRadiusLabel(elem: UILabel) {
+        elem.layer.cornerRadius = 5
+        elem.backgroundColor = UIColor.lightGray
+    }
+    
+}
+

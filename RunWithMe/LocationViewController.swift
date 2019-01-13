@@ -100,7 +100,6 @@ class LocationViewController: UIViewController, CLLocationManagerDelegate {
     
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        print("location update")
         if !isDistanceUpdating {
             return
         }
