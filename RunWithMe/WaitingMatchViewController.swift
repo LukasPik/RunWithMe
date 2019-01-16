@@ -103,6 +103,8 @@ class WaitingMatchViewController: UIViewController {
         
         alert.addAction(UIAlertAction(title: "No", style: UIAlertAction.Style.default, handler: { (action) in
             print("No clicked")
+            let match = self.dbRef.child("matches").child(self.matchRef!)
+            match.updateChildValues(["init": 0])
             self.performSegue(withIdentifier: "cancelWaitingSegue", sender: self)
             alert.dismiss(animated: true, completion: nil)
         }))

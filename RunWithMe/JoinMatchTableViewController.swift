@@ -80,6 +80,7 @@ class JoinMatchTableViewController: UITableViewController {
             
             print(val ?? NSDictionary())
             if let match = val {
+                print("Match print " + match.descriptionInStringsFileFormat)
                 if match["init"] as! Int == 2 {
                     let dist_str = match["dist"] as! String
                     if dist_str.contains("k") {
@@ -92,8 +93,14 @@ class JoinMatchTableViewController: UITableViewController {
                     self.match_id = Int(snapshot.key) ?? 0
                     self.opponent = match["creator"] as? String
                     self.performSegue(withIdentifier: "joinMatchSegue", sender: self)
+                } else if match["init"] as! Int == 0 {
+                    self.createAlert(title: "Match canceled", message: "Another user canceled match with you.")
+                    self.dbRef.removeObserver(withHandle: self.refHandle)
                 }
+            } else {
+                self.createAlert(title: "Match canceled", message: "Another user canceled match with you.")
             }
+            
         }
         
         
@@ -160,6 +167,7 @@ class JoinMatchTableViewController: UITableViewController {
     
     func downloadMatchData() {
         print("Downloading data .....")
+        matches.removeAll()
         dbRef.child("matches").observeSingleEvent(of: .value) { (snapshot) in
             if let dict = snapshot.value as? NSDictionary {
                 print(dict)
@@ -185,14 +193,15 @@ class JoinMatchTableViewController: UITableViewController {
     
     func createAlert(title: String, message: String) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Yes", style: UIAlertAction.Style.default, handler: { (action) in
-            alert.dismiss(animated: true, completion: nil)
-        }))
-        
-        alert.addAction(UIAlertAction(title: "No", style: UIAlertAction.Style.default, handler: { (action) in
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: { (action) in
             alert.dismiss(animated: true, completion: nil)
         }))
         self.present(alert, animated: true, completion: nil)
+        downloadMatchData()
+        /*alert.addAction(UIAlertAction(title: "No", style: UIAlertAction.Style.default, handler: { (action) in
+            alert.dismiss(animated: true, completion: nil)
+        }))
+        self.present(alert, animated: true, completion: nil) */
     }
 
 }
